@@ -1,0 +1,32 @@
+Fun <| (Main, (args), [
+    // this is a comment
+    "Hello, World!" |> Print
+    // variable assignment
+    (test, 10) |> PureAssign
+    // arrays
+    (arr, (0,1,2,5,9,4,1)) |> PureAssign
+    // array functions
+    arr |> Sort |> Print // prints (0,1,2,5,9,4,1)
+    // array index
+    (arr, 0) |> Index |> Print // prints 0
+    // string literals
+    (stringTest, "hello!") |> ImpureAssign
+    // wizardry
+    (summation, (1, 1) |> Sum) |> ImpureAssign |> Print // init 'summation' to 1+1
+    (summation, (1, summation) |> Sum) |> ImpureAssign |> Print // summation++
+    // iteration
+    Repeat <| (10, (i), { i |> Print |> Return })
+    // other iteration
+    For <| ((0,10,2,4,5,10,8,2), (i), {
+        i |> Print |> Return
+    })
+    for (const i of [0,10,2,4,5,10,8,2]) {
+        const pureIds = {i:i}, impureIds = {}, pureFunctions = {}, impureFunctions = {};
+    }
+    // array comprehension
+    Repeat <| (10, (i), {
+        i |> Return
+    }) |> Print
+    // exit from main
+    0 |> Return
+])

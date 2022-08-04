@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "minify": "^9.1.0",
+    "path": "^0.12.7",
+    "readline-sync": "^1.4.10",
+    "try-to-catch": "^3.0.1"
+  },
+  "type": "module"
+}

@@ -1,0 +1,2 @@
+Import <| "dmoj"
+"Hello, World!" |> Print

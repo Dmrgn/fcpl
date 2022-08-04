@@ -1,0 +1,2 @@
+const pureIds={},pureFunctions={},impureIds={},impureFunctions={},importedPureIds={},importedPureFunctions={Print:function(){if(typeof print!=="undefined"){print(...arguments)}else{console.log(...arguments)}return arguments.length>1?arguments:arguments[0]}},importedImpureIds={},importedImpureFunctions={};importedPureFunctions["Print"]("Hello, World!");
+// Transplied from fcpl. Version: 0.0.1
