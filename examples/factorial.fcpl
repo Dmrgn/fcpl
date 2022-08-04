@@ -1,0 +1,15 @@
+// import the standard library
+Import <| "std"
+
+Fun <| (Fact, (x), {
+    If <| ((x, 1) GreaterOrEqualTo, {
+        (
+            x, 
+            ((x, 1) |> Difference) |> Fact
+        ) |> Product |> Return
+    }, {
+        1 |> Return
+    })
+})
+
+(10) |> Fact
