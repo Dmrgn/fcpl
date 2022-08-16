@@ -27,7 +27,7 @@ Factorial Program
 Import <| "std"
 
 Fun <| (Fact, (x), {
-    If <| ((x, 1) GreaterOrEqualTo, {
+    If <| ((x, 1) |> GreaterOrEqualTo, {
         (
             x, 
             ((x, 1) |> Difference) |> Fact
