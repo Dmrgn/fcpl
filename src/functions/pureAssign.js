@@ -12,7 +12,7 @@ export class PureAssign {
             console.log("Hmmm... you can't assign to a Pure Id which has already been assigned to on line " + line);
         }
         scope.pureIds[args[0].value] = true;
-        let output = `pureIds["${args[0].value}"] = ${Transpiled.TO_COMPILE_KEY}`;
+        let output = `const ${args[0].value} = ${Transpiled.TO_COMPILE_KEY}`;
         let toCompile = [args[1]];
         return new Transpiled(output, toCompile, line, line);
     }

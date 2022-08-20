@@ -13,6 +13,16 @@ import { For } from "./functions/for.js";
 import { Id } from "./tokens/id.js";
 import { Transpiled } from "./expressions/transpiled.js";
 import { Import } from "./functions/import.js";
+import { If } from "./functions/if.js";
+import { And } from "./functions/and.js";
+import { Or } from "./functions/or.js";
+import { Not } from "./functions/not.js";
+import { GreaterThan } from "./functions/greaterThan.js";
+import { GreaterOrEqualTo } from "./functions/greaterOrEqualTo.js";
+import { LessThan } from "./functions/lessThan.js";
+import { LessOrEqualTo } from "./functions/lessOrEqualTo.js";
+import { TranspiledFunction } from "./expressions/transpiledFunction.js";
+
 
 // looks for logic and structure errors
 // runs compile-time functions
@@ -24,7 +34,15 @@ export class Refiner {
         "Return":Return,
         "Index":Index,
         "For":For,
-        "Import":Import
+        "Import":Import,
+        "If":If,
+        "And":And,
+        "Or":Or,
+        "Not":Not,
+        "GreaterThan":GreaterThan,
+        "GreaterOrEqualTo":GreaterOrEqualTo,
+        "LessThan":LessThan,
+        "LessOrEqualTo":LessOrEqualTo
     }
     static refineAst(ast) {
         function refineChild(child) {
@@ -35,6 +53,9 @@ export class Refiner {
                     return Refiner.refineAst(child);
                 case Id.type:
                     return child.resolve(ast);
+                case TranspiledFunction.type:
+                    child.toCompile = [refineChild(child.toCompile[0])];
+                    return child;
                 case Expression.type:
                     // check if there is a compile function with the same name
                     if (!Refiner.compileFunctions[child.functionId.value]) {

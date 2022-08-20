@@ -6,10 +6,10 @@ export class ImpureScope extends Scope  {
     static type = "impureScopeExpression";
     impureIds = {};
     pureIds = {};
-    pureFunctions = {};
     impureFunctions = {};
-    constructor(tokens, id, globalScope) {
-        super(ImpureScope.type, tokens, id, globalScope);
+    pureFunctions = {};
+    constructor(tokens, id, globalScope, parentScope) {
+        super(ImpureScope.type, tokens, id, globalScope, parentScope);
     }
     findId(name) {
         if (this.pureIds.hasOwnProperty(name)) return Id.PURE_ID_TYPE;

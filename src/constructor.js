@@ -4,6 +4,9 @@ import { Expression } from "./expressions/expression.js";
 import { ImpureScope } from "./expressions/impureScope.js";
 import { PureScope } from "./expressions/pureScope.js";
 import { Transpiled } from "./expressions/transpiled.js";
+import { TranspiledFunction } from "./expressions/transpiledFunction.js";
+import { If } from "./functions/if.js";
+import { For } from "./functions/for.js";
 
 // containing methods for rebuilding a fcpl ast into javascript
 export class Constructor {
@@ -49,22 +52,25 @@ export class Constructor {
                     }
                     js += "]";
                     break;
-                case PureScope.type:
-                    js = child.unWrapOnCompile ? "" : `function(__pure_scope){`;
-                    js += Constructor.constructAst(child);
-                    js += child.unWrapOnCompile ? "" : "}";
-                    break;
                 case ImpureScope.type:
-                    js = child.unWrapOnCompile ? "" : `function(__impure_scope){`;
                     js += Constructor.constructAst(child);
-                    js += child.unWrapOnCompile ? "" : "}";
+                    break;
+                case PureScope.type:
+                    js += Constructor.constructAst(child);
+                    break;
+                case TranspiledFunction.type:
+                    let fullyTranspiledFunction = child.resolve();
+                    for (const toCompile of child.toCompile) {
+                        fullyTranspiledFunction = fullyTranspiledFunction.replace(TranspiledFunction.TO_COMPILE_KEY, childToString(toCompile));
+                    }
+                    js+=fullyTranspiledFunction;
                     break;
                 case Transpiled.type:
-                    let fullyCompiled = child.rawJs;
+                    let fullyTranspiled = child.rawJs;
                     for (const toCompile of child.toCompile) {
-                        fullyCompiled = fullyCompiled.replace(Transpiled.TO_COMPILE_KEY, childToString(toCompile));
+                        fullyTranspiled = fullyTranspiled.replace(Transpiled.TO_COMPILE_KEY, childToString(toCompile));
                     }
-                    js = fullyCompiled;
+                    js = fullyTranspiled;
                     break;
                 case TokenTypes.ID_TYPE:
                     js = `${child.value}`;
@@ -80,21 +86,22 @@ export class Constructor {
         }
         const tree = ast.ast;
         let output = "";
-        output = declareObject(ast.pureIds, "pureIds", true);
-        output += declareObject(ast.pureFunctions, "pureFunctions");
-        if (ast.type === PureScope.type) {
-            output += ", impureIds = {}"
-            output += ", impureFunctions = {};"
-        } else {
-            output += declareObject(ast.impureIds, "impureIds");
-            output += declareObject(ast.impureFunctions, "impureFunctions", false, ast.id != "global");
-        }
-        if (ast.id == "global") {
-            output += declareObject(ast.importedPureIds, "importedPureIds");
-            output += declareObject(ast.importedPureFunctions, "importedPureFunctions");
-            output += declareObject(ast.importedImpureIds, "importedImpureIds");
-            output += declareObject(ast.importedImpureFunctions, "importedImpureFunctions", false, true);
-        }
+        // add compile function result containers to the global scope
+        if (ast.id === "global") output += `let ${If.IF_RESULT_NAME} = null; let ${For.LOOP_RESULT_NAME} = null;`;
+        // output = declareObject(ast.pureIds, "pureIds", true);
+        // output += declareObject(ast.pureFunctions, "pureFunctions");
+        // if (ast.type === PureScope.type) {
+        //     output += ", impureIds = {}, impureFunctions = {};"
+        // } else {
+        //     output += declareObject(ast.impureIds, "impureIds");
+        //     output += declareObject(ast.impureFunctions, "impureFunctions", false, ast.id != "global");
+        // }
+        // if (ast.id == "global") {
+        //     output += declareObject(ast.importedPureIds, "importedPureIds");
+        //     output += declareObject(ast.importedPureFunctions, "importedPureFunctions");
+        //     output += declareObject(ast.importedImpureIds, "importedImpureIds");
+        //     output += declareObject(ast.importedImpureFunctions, "importedImpureFunctions", false, true);
+        // }
         while (tree.length > 0) {
             const child = tree.shift();
             output += childToString(child) + ";";

@@ -5,8 +5,8 @@ export class PureScope extends Scope  {
     static type = "pureScopeExpression";
     pureIds = {};
     pureFunctions = {};
-    constructor(tokens, id, globalScope) {
-        super(PureScope.type, tokens, id, globalScope);
+    constructor(tokens, id, globalScope, parentScope) {
+        super(PureScope.type, tokens, id, globalScope, parentScope);
     }
     findId(name) {
         if (this.pureIds.hasOwnProperty(name)) return Id.PURE_ID_TYPE;

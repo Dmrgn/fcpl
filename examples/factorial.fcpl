@@ -2,14 +2,16 @@
 Import <| "std"
 
 Fun <| (Fact, (x), {
-    If <| ((x, 1) GreaterOrEqualTo, {
+    If <| ((x, 1) |> GreaterOrEqualTo, {
         (
             x, 
             ((x, 1) |> Difference) |> Fact
         ) |> Product |> Return
     }, {
         1 |> Return
-    })
+    }) |> Return
 })
 
-(10) |> Fact
+For <| (10, (x), {
+    (x) |> Fact |> Print
+})

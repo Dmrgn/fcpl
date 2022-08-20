@@ -18,7 +18,7 @@ export class Import {
         if (args[0].type !== TokenTypes.LITERAL_TYPE || args[0].subtype !== TokenTypes.LITERAL_SUBTYPES.STRING)
             console.log("hmmm... Import expected a string literal as parameter 1 but got " + args[0].type + " " + (args[0].subtype ?? "") + " instead on line " + line);
 
-        const passedPath = args[0].value.replaceAll("\"", "").toLowerCase().split(".");
+        const passedPath = args[0].value.replaceAll("\"", "").split(".");
         if (passedPath.length > 2 || passedPath.length < 1) 
             console.log("hmmm... Import expected a string parameter in the form of 'libraryName.libraryElement' or 'libraryName' on line " + line + " but got " + args[0].value + " instead...");
         let libraryPath;
@@ -41,17 +41,22 @@ export class Import {
         if (fs.existsSync(libraryPath)) {
             if (isDir) { // we need to import every file from the specified directory
                 const library = fs.readdirSync(libraryPath);
+                let raw = "";
                 fs.readdirSync(libraryPath).forEach(file => {
                     const fileData = eval(fs.readFileSync(path.resolve(libraryPath, file), "utf8"));
-                    scope.globalScope[`imported${fileData.type}`][fileData.name] = fileData.resolve();
+                    raw += `const ${file.split(".")[0]} = ${fileData.resolve()};`;
+                    // scope.globalScope[`imported${fileData.type}`][fileData.name] = fileData.resolve();
                 });
-                return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
+                // return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
+                return new Transpiled(raw, [], line, line);
             }
             // we need to import only the specified file
             const library = eval(fs.readFileSync(libraryPath, "utf8"));
-            scope.globalScope[`imported${library.type}`][library.name] = library.resolve();
+            let raw = `const ${passedPath[1]} = ${library.resolve()};`;
+            // scope.globalScope[`imported${library.type}`][library.name] = library.resolve();
 
-            return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
+            // return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
+            return new Transpiled(raw, [], line, line);
         }
         console.log("hmmm... on line " + line + " you tried to import something called " + args[0].value + " but that library doesn't exist anywhere visible!'");
     }

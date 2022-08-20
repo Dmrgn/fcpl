@@ -12,7 +12,7 @@ export class ImpureAssign {
         if (scope.pureIds[args[0].value]) console.log("hmmm... you cant ImpureAssign to an Id previously assigned to with PureAssign ... on line " + line);
         if (scope.type === PureScope.type) console.log("hmmm... you cant use ImpureAssign inside of a Pure Scope ... on line " + line);
         scope.impureIds[args[0].value] = true;
-        let output = `impureIds["${args[0].value}"] = ${Transpiled.TO_COMPILE_KEY}`;
+        let output = `let ${args[0].value} = ${Transpiled.TO_COMPILE_KEY}`;
         let toCompile = [args[1]];
         return new Transpiled(output, toCompile, line, line);
     }

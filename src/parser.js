@@ -8,7 +8,7 @@ import { Collection } from "./expressions/collection.js";
 export class Parser {
     static createAst(tokens) {
         // create global impure scope that starts empty
-        const ast = new ImpureScope(tokens, "global", "self");
+        const ast = new ImpureScope(tokens, "global", "self", "global");
         Parser.parseScope(ast);
         return ast;
     }
@@ -85,9 +85,9 @@ export class Parser {
                 console.log("hmmm this scope isnt finished or a bracket is misplaced on line '" + starter.line + "'");
             }
             if (starter.subtype === TokenTypes.LITERAL_SUBTYPES.IMPURE_SCOPE_START)
-                return Parser.parseScope(new ImpureScope(tokens, "anonymous", ast.globalScope));
+                return Parser.parseScope(new ImpureScope(tokens, "anonymous", ast.globalScope, ast));
             else
-                return Parser.parseScope(new PureScope(tokens, "anonymous", ast.globalScope));
+                return Parser.parseScope(new PureScope(tokens, "anonymous", ast.globalScope,));
         }
         // iterate through tokens and append to ast or stack
         while (ast.tokens.length > 0) {

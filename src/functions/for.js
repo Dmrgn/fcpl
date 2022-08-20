@@ -4,6 +4,7 @@ import { PureScope } from "../expressions/pureScope.js";
 import { Transpiled } from "../expressions/transpiled.js";
 import { Id } from "../tokens/id.js";
 import { TokenTypes } from "../tokenTypes.js";
+import { Fun } from "./fun.js";
 
 // expects arguments For(collection or number literal, collection or id, scope);
 export class For {
@@ -47,32 +48,37 @@ export class For {
         // Compile the collection or id and the function scope
         let toCompile = [args[0], args[2]];
 
-        let output = `impureIds.${For.LOOP_RESULT_NAME} = function() {const ${resultId} = [];`;
+        let output = `${For.LOOP_RESULT_NAME} = function() {const ${resultId} = [];`;
 
+        
         // if we are working with a collection we want to use es6 enhanced for loop syntax
         if (args[0].type === Collection.type) {
             output += `const ${iterableId} = ${Transpiled.TO_COMPILE_KEY};`;
-            output += `for (const ${indexId} in ${iterableId})`
+            output += `for (const ${indexId} in ${iterableId}) {`
             // create entry for the value of the current element in the function scope
             args[2].pureIds[elementId] = `${iterableId}[${indexId}]`;
+            output += `const ${elementId} = ${iterableId}[${indexId}];`;
         } else if (args[0].type === TokenTypes.LITERAL_TYPE) {
             // if we are working with a literal we want to use standard for loop syntax
-            output += `for (let ${indexId} = 0; ${indexId} < ${Transpiled.TO_COMPILE_KEY}; ${indexId}++)`
+            output += `for (let ${indexId} = 0; ${indexId} < ${Transpiled.TO_COMPILE_KEY}; ${indexId}++) {`
             // create entry for the value of the current element in the function scope 
             // (itll be identical to the indexId in this case because it was a literal
             // number passed)
             args[2].pureIds[elementId] = `${indexId}`;
+            output += `const ${elementId} = ${indexId};`;
         } else if (args[0].type === Id.type) {
             // if we are working with an Id then we want to use standard for loop syntax
             output += `const ${iterableId} = ${Transpiled.TO_COMPILE_KEY};`;
             output += `for (let ${indexId} = 0; ${indexId} < (`;
             output += `Array.isArray(${iterableId}) ? ${iterableId}.length : ${iterableId}`;
-            output += `); ${indexId}++)`;
+            output += `); ${indexId}++) {`;
             // create entry for the value of the current element in the function scope 
             args[2].pureIds[elementId] = `Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId}`;
+            output += `const ${elementId} = Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId};`;
         }
         // push each call to the created scope onto the result array
-        output += `{${resultId}.push(${Transpiled.TO_COMPILE_KEY}())}`;
+        output += `${resultId}.push(function() {${Transpiled.TO_COMPILE_KEY}}())}`;
+        console.log(output);
         // return the result array
         output += `return ${resultId};}()`;
         return new Transpiled(output, toCompile, line, line);

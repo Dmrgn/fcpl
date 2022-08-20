@@ -1,2 +1,9 @@
-Import <| "dmoj"
-"Hello, World!" |> Print
+Import <| "std.Print"
+
+(x, 10) |> ImpureAssign
+
+Fun <| (Main, (), {
+    x |> Print
+})
+
+Main <| (0)
