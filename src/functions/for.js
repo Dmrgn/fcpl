@@ -41,18 +41,19 @@ export class For {
         // (the entry for the elementId is created later based on whether a collection
         // or a literal is passed as the first parameter)
         // but only if an index Id was specified (so we dont create overlap)
-        if (indexId) {
-            args[2].pureIds[indexId] = `${indexId}`;
-        } else {
+        if (!indexId) {
             // set a generic indexId if one was not specified
+            args[2].pureIds[indexId] = `${indexId}`;
             indexId = "__index_id_";
         }
+
+        // the function scope should gain access to the parent scope
+        args[2].parentScope = scope;
 
         // Compile the collection or id and the function scope
         let toCompile = [args[0], args[2]];
 
         let output = `${For.LOOP_RESULT_NAME} = function() {const ${resultId} = [];`;
-
         
         // if we are working with a collection we want to use es6 enhanced for loop syntax
         if (args[0].type === Collection.type) {

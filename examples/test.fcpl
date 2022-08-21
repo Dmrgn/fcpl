@@ -1,9 +1,6 @@
 Import <| "std.Print"
 
-(x, 10) |> ImpureAssign
-
-Fun <| (Main, (), {
-    x |> Print
+(arr, (10,3,4,5,6,7,8,9,10)) |> PureAssign
+For <| (arr, (x, i), {
+    (x, i) |> Print
 })
-
-Main <| (0)

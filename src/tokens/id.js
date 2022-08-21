@@ -7,51 +7,36 @@ export class Id extends Token {
     static type = "id";
     static IMPURE_ID_TYPE = "impureId";
     static PURE_ID_TYPE = "pureId";
-    static MAPPING = {};
-    static IMPORTED_MAPPING = {};
     value = null;
     isExpression = true;
     constructor(lineNumber, value) {
         super(lineNumber, Id.type);
         this.value = value;
-        if (!Id.MAPPING?.exists) {
-            Id.MAPPING["exists"] = true;
-            Id.MAPPING[Id.IMPURE_ID_TYPE] = "impureIds";
-            Id.MAPPING[Id.PURE_ID_TYPE] = "pureIds";
-            Id.MAPPING[ImpureScope.type] = "impureFunctions";
-            Id.MAPPING[PureScope.type] = "pureFunctions";
-            Id.IMPORTED_MAPPING[Id.IMPURE_ID_TYPE] = "importedImpureIds";
-            Id.IMPORTED_MAPPING[Id.PURE_ID_TYPE] = "importedPureIds";
-            Id.IMPORTED_MAPPING[ImpureScope.type] = "importedImpureFunctions";
-            Id.IMPORTED_MAPPING[PureScope.type] = "importedPureFunctions";
-        }
     }
     existsInScope(scope) {
         let scopePresence = scope.findId(this.value);
-        let type = false;
         // check if the id was found in the parent scope
         if (scopePresence) {
-            type = Id.MAPPING[scopePresence];
+            return scopePresence;
         } else { // check if the id is imported in the global scope
             scopePresence = scope.globalScope.findImportedId(this.value);
             if (scopePresence) {
-                type = Id.IMPORTED_MAPPING[scopePresence];
+                return scopePresence;
             } else { // check if the id is present in the parent scope
                 if (scope.parentScope === "global")
                     return false;
-                type = this.existsInScope(scope.parentScope);
+                return this.existsInScope(scope.parentScope);
             }
         }
-        return type;
     }
     resolve(scope) {
-        // let output = `idNotFound["${this.value}"]`;
-        // // check if this id is accessible in the current scope recursively
-        // const scopePresence = this.existsInScope(scope);
-        // if (!scopePresence) {
-        //     console.log("hmmm... you've used the id " + this.value + " on line " + this.lineNumber + " but it hasnt been declared anywhere visible!");
-        // }
-        // return new Transpiled(output, [], this.lineNumber, this.lineNumber);
+        // check if the id is valid for the passed scope
+        const scopePresence = this.existsInScope(scope);
+        // if we are impure inside of a pure scope
+        if (scopePresence[0] === "i" && scope.type[0] === "p")
+            console.log("hmmm... you tried to access " + this.value + " on line " + this.lineNumber + " but you are not allowed to use impure state inside of a pure scope!");
+        if (!scopePresence)
+            console.log("hmmm... you tried to access " + this.value + " on line " + this.lineNumber + " but it hasn't been declared anywhere visible.");
         return new Transpiled(this.value, [], this.lineNumber, this.lineNumber);
     }
 }

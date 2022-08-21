@@ -24,6 +24,7 @@ export class Scope  {
             this.importedImpureIds = [];
             this.importedImpureFunctions = [];
             this.findImportedId = function(name) {
+                
                 if (this.importedPureIds.hasOwnProperty(name)) return Id.PURE_ID_TYPE;
                 if (this.importedPureFunctions.hasOwnProperty(name)) return PureScope.type;
                 if (this.importedImpureIds.hasOwnProperty(name)) return Id.IMPURE_ID_TYPE;

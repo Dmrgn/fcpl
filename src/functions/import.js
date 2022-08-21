@@ -44,16 +44,18 @@ export class Import {
                 let raw = "";
                 fs.readdirSync(libraryPath).forEach(file => {
                     const fileData = eval(fs.readFileSync(path.resolve(libraryPath, file), "utf8"));
-                    raw += `const ${file.split(".")[0]} = ${fileData.resolve()};`;
-                    // scope.globalScope[`imported${fileData.type}`][fileData.name] = fileData.resolve();
+                    const fileResolution = fileData.resolve();
+                    raw += `const ${file.split(".")[0]} = ${fileResolution};`;
+                    scope.globalScope[`imported${fileData.type}`][fileData.name] = fileResolution;
                 });
                 // return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
                 return new Transpiled(raw, [], line, line);
             }
             // we need to import only the specified file
             const library = eval(fs.readFileSync(libraryPath, "utf8"));
-            let raw = `const ${passedPath[1]} = ${library.resolve()};`;
-            // scope.globalScope[`imported${library.type}`][library.name] = library.resolve();
+            const libraryResolution = library.resolve()
+            let raw = `const ${passedPath[1]} = ${libraryResolution};`;
+            scope.globalScope[`imported${library.type}`][library.name] = libraryResolution;
 
             // return new Transpiled(`/* imported ${args[0].value} */`, [], line, line);
             return new Transpiled(raw, [], line, line);

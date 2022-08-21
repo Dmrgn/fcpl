@@ -25,6 +25,8 @@ export class Fun {
                 console.log("hmmm... the parameter list of a function should only contain tokens of type Id but got " + args[1].items[i].type + " instead on line " + line);
             parameters.push(args[1].items[i].value);
         }
+        // set the scopes parent scope
+        args[2].parentScope = scope;
         // add this function to the scopes list of functions
         scope[`${purity}Functions`][args[0].value] = true;
         // create final output
