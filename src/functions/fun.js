@@ -28,7 +28,7 @@ export class Fun {
         // add this function to the scopes list of functions
         scope[`${purity}Functions`][args[0].value] = true;
         // create final output
-        let output = `const ${args[0].value} = ${Transpiled.TO_COMPILE_KEY}`;
+        let output = `${args[0].value} = ${Transpiled.TO_COMPILE_KEY}`;
         let toCompile = [new TranspiledFunction(`${TranspiledFunction.TO_COMPILE_KEY}`, [args[2]], parameters, line, line)];
         return new Transpiled(output, toCompile, line, line);
     }

@@ -23,6 +23,28 @@ export class Constructor {
             output += isLastOfDeclarations ? "};" : "}";
             return output;
         }
+        // declares all variables used in the passed scope
+        function declareVariables(scope) {
+            let output = "";
+            function declare(varWord, variables) {
+                let output = `${varWord} `;
+                const keys = Object.keys(variables)
+                if (keys.length === 0) return "";
+                for (const key in keys) {
+                    output += `${keys[key]} = ${variables[keys[key]]}`;
+                    if (key < keys.length-1)
+                        output += ",";
+                }
+                return output += ";";
+            }
+            output += declare("let", scope.pureIds);
+            output += declare("let", scope.pureFunctions);
+            if (scope.type === ImpureScope.type) {
+                output += declare("let", scope.impureIds);
+                output += declare("let", scope.impureFunctions);
+            }
+            return output;
+        }
         // converts an element of the ast into a javascript
         function childToString(child) {
             let js = "";
@@ -85,23 +107,10 @@ export class Constructor {
             return js;
         }
         const tree = ast.ast;
-        let output = "";
+        let output = declareVariables(ast);
         // add compile function result containers to the global scope
         if (ast.id === "global") output += `let ${If.IF_RESULT_NAME} = null; let ${For.LOOP_RESULT_NAME} = null;`;
-        // output = declareObject(ast.pureIds, "pureIds", true);
-        // output += declareObject(ast.pureFunctions, "pureFunctions");
-        // if (ast.type === PureScope.type) {
-        //     output += ", impureIds = {}, impureFunctions = {};"
-        // } else {
-        //     output += declareObject(ast.impureIds, "impureIds");
-        //     output += declareObject(ast.impureFunctions, "impureFunctions", false, ast.id != "global");
-        // }
-        // if (ast.id == "global") {
-        //     output += declareObject(ast.importedPureIds, "importedPureIds");
-        //     output += declareObject(ast.importedPureFunctions, "importedPureFunctions");
-        //     output += declareObject(ast.importedImpureIds, "importedImpureIds");
-        //     output += declareObject(ast.importedImpureFunctions, "importedImpureFunctions", false, true);
-        // }
+        
         while (tree.length > 0) {
             const child = tree.shift();
             output += childToString(child) + ";";

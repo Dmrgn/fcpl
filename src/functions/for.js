@@ -37,13 +37,16 @@ export class For {
             // elementId is present as the second parameter
             elementId = args[1].value
         
-        // set a generic indexId if one was not specified
-        indexId = indexId ?? "__index_id";
-
         // create entry for the index of the current element in the function scope
         // (the entry for the elementId is created later based on whether a collection
         // or a literal is passed as the first parameter)
-        args[2].pureIds[indexId] = `${indexId}`;
+        // but only if an index Id was specified (so we dont create overlap)
+        if (indexId) {
+            args[2].pureIds[indexId] = `${indexId}`;
+        } else {
+            // set a generic indexId if one was not specified
+            indexId = "__index_id_";
+        }
 
         // Compile the collection or id and the function scope
         let toCompile = [args[0], args[2]];
@@ -57,7 +60,7 @@ export class For {
             output += `for (const ${indexId} in ${iterableId}) {`
             // create entry for the value of the current element in the function scope
             args[2].pureIds[elementId] = `${iterableId}[${indexId}]`;
-            output += `const ${elementId} = ${iterableId}[${indexId}];`;
+            // output += `const ${elementId} = ${iterableId}[${indexId}];`;
         } else if (args[0].type === TokenTypes.LITERAL_TYPE) {
             // if we are working with a literal we want to use standard for loop syntax
             output += `for (let ${indexId} = 0; ${indexId} < ${Transpiled.TO_COMPILE_KEY}; ${indexId}++) {`
@@ -65,7 +68,7 @@ export class For {
             // (itll be identical to the indexId in this case because it was a literal
             // number passed)
             args[2].pureIds[elementId] = `${indexId}`;
-            output += `const ${elementId} = ${indexId};`;
+            // output += `const ${elementId} = ${indexId};`;
         } else if (args[0].type === Id.type) {
             // if we are working with an Id then we want to use standard for loop syntax
             output += `const ${iterableId} = ${Transpiled.TO_COMPILE_KEY};`;
@@ -74,11 +77,10 @@ export class For {
             output += `); ${indexId}++) {`;
             // create entry for the value of the current element in the function scope 
             args[2].pureIds[elementId] = `Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId}`;
-            output += `const ${elementId} = Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId};`;
+            // output += `const ${elementId} = Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId};`;
         }
         // push each call to the created scope onto the result array
         output += `${resultId}.push(function() {${Transpiled.TO_COMPILE_KEY}}())}`;
-        console.log(output);
         // return the result array
         output += `return ${resultId};}()`;
         return new Transpiled(output, toCompile, line, line);
