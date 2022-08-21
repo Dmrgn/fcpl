@@ -22,11 +22,12 @@ export class If {
                 console.log("hmmm... If expected argument 3 to be of type scope but got " + args[2].type + " instead on line " + line);
             isElse = true;
         }
-        
+
         let toCompile = [args[0], args[1]];
         let output = `${If.IF_RESULT_NAME} = function() {`
         output += `if (${Transpiled.TO_COMPILE_KEY}) { ${Transpiled.TO_COMPILE_KEY} return true; }`;
         if (isElse) {
+            args[2].parentScope = scope;
             toCompile.push(args[2]);
             output += ` else { ${Transpiled.TO_COMPILE_KEY} return false; }`;
         }

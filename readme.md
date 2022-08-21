@@ -24,6 +24,7 @@ Import <| "std.print"
 Factorial Program
 ```dart
 // import the standard library
+// import the standard library
 Import <| "std"
 
 Fun <| (Fact, (x), {
@@ -34,9 +35,10 @@ Fun <| (Fact, (x), {
         ) |> Product |> Return
     }, {
         1 |> Return
-    })
+    }) |> Return
 })
 
-(10) |> Fact
-
+For <| (10, (x), {
+    (x) |> Fact |> Print
+})
 ```

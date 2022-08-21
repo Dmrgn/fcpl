@@ -13,7 +13,7 @@ import { SPLASH_TITLES } from "./splashes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-export const VERSION = "0.2.1";
+export const VERSION = "0.3.0";
 
 /** Written by Daniel Morgan
  ________  ________  ________   ___  _______   ___               _____ ______   ________  ________  ________  ________  ________      

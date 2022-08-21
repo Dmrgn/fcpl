@@ -87,7 +87,7 @@ export class Parser {
             if (starter.subtype === TokenTypes.LITERAL_SUBTYPES.IMPURE_SCOPE_START)
                 return Parser.parseScope(new ImpureScope(tokens, "anonymous", ast.globalScope, ast));
             else
-                return Parser.parseScope(new PureScope(tokens, "anonymous", ast.globalScope,));
+                return Parser.parseScope(new PureScope(tokens, "anonymous", ast.globalScope, ast));
         }
         // iterate through tokens and append to ast or stack
         while (ast.tokens.length > 0) {

@@ -1,7 +1,7 @@
 class Print {
     static name = "Print";
     static type = "PureFunctions";
-    static description = "Determines if the script is running inside of dmoj and uses the apropriate io method.";
+    static description = "Determines if the script is running inside of dmoj and uses the apropriate print method.";
     static resolve() {
         return function() {
             if (typeof print !== 'undefined') {

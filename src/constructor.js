@@ -28,10 +28,16 @@ export class Constructor {
             let output = "";
             function declare(varWord, variables) {
                 let output = `${varWord} `;
-                const keys = Object.keys(variables)
+                // you can set a variable to be invisible when constructing
+                // by setting its value to null when it is added to the scope
+                // so we need to remove all null variables from being set
+                const visibleVariables = Object.fromEntries(Object.entries(variables).filter((x)=>{
+                    return variables[x] !== null;
+                }));
+                const keys = Object.keys(visibleVariables)
                 if (keys.length === 0) return "";
                 for (const key in keys) {
-                    output += `${keys[key]} = ${variables[keys[key]]}`;
+                    output += `${keys[key]} = ${visibleVariables[keys[key]]}`;
                     if (key < keys.length-1)
                         output += ",";
                 }

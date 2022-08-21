@@ -36,7 +36,7 @@ export class Import {
             if (passedPath[0] == Import.STD_NAME) 
                 libraryPath = path.resolve(__dirname, `../../libs/std/${passedPath[1]}.js`)
             else
-                libraryPath = path.resolve(`./${passedPath[0]}/${passedPath[1]}.js`)
+                libraryPath = path.resolve(`./libs/${passedPath[0]}/${passedPath[1]}.js`)
         }
         if (fs.existsSync(libraryPath)) {
             if (isDir) { // we need to import every file from the specified directory

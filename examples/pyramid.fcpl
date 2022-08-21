@@ -1,0 +1,56 @@
+// Creates a pyramid of stars
+//         *******
+//          *****
+//           ***
+//            *
+
+Import <| "std.Print"
+Import <| "std.Join"
+Import <| "std.Product"
+Import <| "std.Difference"
+Import <| "std.Concat"
+Import <| "std.Reverse"
+
+// the height of the pyramid to create
+(pyramidHeight, 10) |> PureAssign
+
+// creates a pyramid of '*'s with the specified
+// height returns it as a String
+Fun <| (GeneratePyramidString, (height), {
+    // given the index of a layer of the 
+    // pyramid, return the number of stars
+    // on that layer
+    Fun <| (NumStars, (layer), {
+        // ((2*height)-1) - (2*layer)
+        (
+            (
+                (
+                    2,
+                    height
+                ) |> Product,
+                1
+            ) |> Difference,
+            (
+                2,
+                layer
+            ) |> Product
+        ) |> Difference |> Return
+    })
+    // create string for each layer
+    (For <| (height, (layer), {
+        (numStars, layer |> NumStars) |> PureAssign
+        (
+            (
+                For <| (layer, (x), {
+                    Return <| " "
+                }), 
+                For <| (numStars, (x), {
+                    Return <| "*"
+                })
+            ) |> Concat,
+            ""
+        ) |> Join |> Return
+    }) |> Reverse, "\n") |> Join |> Return
+})
+
+pyramidHeight |> GeneratePyramidString |> Print

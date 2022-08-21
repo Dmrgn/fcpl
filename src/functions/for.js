@@ -9,6 +9,7 @@ import { Fun } from "./fun.js";
 // expects arguments For(collection or number literal, collection or id, scope);
 export class For {
     static LOOP_RESULT_NAME = "__loop_result_";
+    static GENERIC_INDEX_ID = "__generic_index_id_";
     static resolve(self, scope) {
         const args = self.parameter.items ?? [self.parameter];
         const line = self.functionId.lineNumber;
@@ -43,12 +44,9 @@ export class For {
         // but only if an index Id was specified (so we dont create overlap)
         if (!indexId) {
             // set a generic indexId if one was not specified
-            args[2].pureIds[indexId] = `${indexId}`;
             indexId = "__index_id_";
         }
-
-        // the function scope should gain access to the parent scope
-        args[2].parentScope = scope;
+        args[2].pureIds[indexId] = `${For.GENERIC_INDEX_ID}`;
 
         // Compile the collection or id and the function scope
         let toCompile = [args[0], args[2]];
@@ -58,13 +56,13 @@ export class For {
         // if we are working with a collection we want to use es6 enhanced for loop syntax
         if (args[0].type === Collection.type) {
             output += `const ${iterableId} = ${Transpiled.TO_COMPILE_KEY};`;
-            output += `for (const ${indexId} in ${iterableId}) {`
+            output += `for (const ${For.GENERIC_INDEX_ID} in ${iterableId}) {`
             // create entry for the value of the current element in the function scope
             args[2].pureIds[elementId] = `${iterableId}[${indexId}]`;
             // output += `const ${elementId} = ${iterableId}[${indexId}];`;
         } else if (args[0].type === TokenTypes.LITERAL_TYPE) {
             // if we are working with a literal we want to use standard for loop syntax
-            output += `for (let ${indexId} = 0; ${indexId} < ${Transpiled.TO_COMPILE_KEY}; ${indexId}++) {`
+            output += `for (let ${For.GENERIC_INDEX_ID} = 0; ${For.GENERIC_INDEX_ID} < ${Transpiled.TO_COMPILE_KEY}; ${For.GENERIC_INDEX_ID}++) {`
             // create entry for the value of the current element in the function scope 
             // (itll be identical to the indexId in this case because it was a literal
             // number passed)
@@ -73,9 +71,9 @@ export class For {
         } else if (args[0].type === Id.type) {
             // if we are working with an Id then we want to use standard for loop syntax
             output += `const ${iterableId} = ${Transpiled.TO_COMPILE_KEY};`;
-            output += `for (let ${indexId} = 0; ${indexId} < (`;
+            output += `for (let ${For.GENERIC_INDEX_ID} = 0; ${For.GENERIC_INDEX_ID} < (`;
             output += `Array.isArray(${iterableId}) ? ${iterableId}.length : ${iterableId}`;
-            output += `); ${indexId}++) {`;
+            output += `); ${For.GENERIC_INDEX_ID}++) {`;
             // create entry for the value of the current element in the function scope 
             args[2].pureIds[elementId] = `Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId}`;
             // output += `const ${elementId} = Array.isArray(${iterableId}) ? ${iterableId}[${indexId}] : ${indexId};`;
