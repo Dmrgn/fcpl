@@ -24,7 +24,6 @@ Import <| "std.print"
 Factorial Program
 ```dart
 // import the standard library
-// import the standard library
 Import <| "std"
 
 Fun <| (Fact, (x), {
