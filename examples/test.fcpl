@@ -1,0 +1,5 @@
+Import <| "std.Print"
+(value, "test") |> ImpureAssign
+{
+    value |> Print
+}
