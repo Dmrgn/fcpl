@@ -1,5 +1,5 @@
 Import <| "std.Print"
 (value, "test") |> ImpureAssign
 {
-    value |> Print
+    value |> Print // produces compile time error
 }
