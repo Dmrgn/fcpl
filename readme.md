@@ -92,7 +92,7 @@ Pure Scopes contain immutable state and pure expressions and is wrapped in `{}` 
     "Printing from a pure scope." |> Print
 }
 ```
-You are not allowed to create impure state inside of a pure scope:
+You are not allowed to use impure state inside of a pure scope:
 ```Dart
 // assign the Literal 10 to the Id 'impureValue' as a Variable
 (impureValue, 10) |> ImpureAssign
