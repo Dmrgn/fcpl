@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import {fileURLToPath} from 'url';
 import {minify} from 'minify';
-import tryToCatch from 'try-to-catch';
 
 import { Lexer } from "./lexer.js";
 import { Parser } from "./parser.js";

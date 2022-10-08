@@ -21,6 +21,7 @@ import { GreaterThan } from "./functions/greaterThan.js";
 import { GreaterOrEqualTo } from "./functions/greaterOrEqualTo.js";
 import { LessThan } from "./functions/lessThan.js";
 import { LessOrEqualTo } from "./functions/lessOrEqualTo.js";
+import { EqualTo } from "./functions/equalTo.js";
 import { TranspiledFunction } from "./expressions/transpiledFunction.js";
 
 
@@ -42,7 +43,8 @@ export class Refiner {
         "GreaterThan":GreaterThan,
         "GreaterOrEqualTo":GreaterOrEqualTo,
         "LessThan":LessThan,
-        "LessOrEqualTo":LessOrEqualTo
+        "LessOrEqualTo":LessOrEqualTo,
+        "EqualTo":EqualTo
     }
     static refineAst(ast) {
         function refineChild(child) {

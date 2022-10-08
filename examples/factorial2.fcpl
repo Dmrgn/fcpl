@@ -1,0 +1,16 @@
+Import <| "std"
+
+Fun <| (Fact, (x), {
+    If <| ((x, 1) |> GreaterOrEqualTo, {
+        (
+            x,
+            (x, 1) |> Difference |> Fact
+        ) |> Product |> Return
+    }, {
+        1 |> Return
+    }) |> Return
+})
+
+For <| (10, (x), {
+    (x, 1) |> Sum |> Fact |> Print
+})

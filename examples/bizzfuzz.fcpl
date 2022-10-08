@@ -1,0 +1,21 @@
+Import <| "std"
+
+Fun <| (BizzFuzz, (x), {
+    If <| (((x, 3) |> Modulo, 0) |> EqualTo, {
+        If <| (((x, 5) |> Modulo, 0) |> EqualTo, {
+            ((("BizzFuzz"),(x)) |> Concat, " ") |> Join |> Return
+        }, {
+            ((("Bizz"),(x)) |> Concat, " ") |> Join |> Return
+        }) |> Return
+    }, {
+        If <| (((x, 5) |> Modulo, 0) |> EqualTo, {
+            ((("Fuzz"),(x)) |> Concat, " ") |> Join |> Return
+        }, {
+            x |> Return
+        }) |> Return
+    }) |> Return
+})
+
+For <| (100, (x), {
+    (x, 1) |> Sum |> BizzFuzz |> Print
+})
