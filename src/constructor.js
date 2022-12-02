@@ -32,7 +32,7 @@ export class Constructor {
                 // by setting its value to null when it is added to the scope
                 // so we need to remove all null variables from being set
                 const visibleVariables = Object.fromEntries(Object.entries(variables).filter((x)=>{
-                    return variables[x] !== null;
+                    return variables[x[0]] !== null;
                 }));
                 const keys = Object.keys(visibleVariables)
                 if (keys.length === 0) return "";

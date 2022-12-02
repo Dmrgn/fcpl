@@ -4,7 +4,7 @@ Fun <| (Fact, (x), {
     If <| ((x, 1) |> GreaterOrEqualTo, {
         (
             x,
-            (x, 1) |> Difference |> Fact
+            ((x, 1) |> Difference) |> Fact
         ) |> Product |> Return
     }, {
         1 |> Return
@@ -12,5 +12,5 @@ Fun <| (Fact, (x), {
 })
 
 For <| (10, (x), {
-    (x, 1) |> Sum |> Fact |> Print
+    (x) |> Fact |> Print
 })

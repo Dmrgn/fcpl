@@ -3,6 +3,8 @@ import { Collection } from "./expressions/collection.js";
 import { Expression } from "./expressions/expression.js";
 import { ImpureScope } from "./expressions/impureScope.js";
 import { PureScope } from "./expressions/pureScope.js";
+import { TranspiledFunction } from "./expressions/transpiledFunction.js";
+import { Transpiled } from "./expressions/transpiled.js";
 
 import { PureAssign } from "./functions/pureAssign.js";
 import { ImpureAssign } from "./functions/impureAssign.js";
@@ -11,7 +13,6 @@ import { Return } from "./functions/return.js";
 import { Index } from "./functions/index.js";
 import { For } from "./functions/for.js";
 import { Id } from "./tokens/id.js";
-import { Transpiled } from "./expressions/transpiled.js";
 import { Import } from "./functions/import.js";
 import { If } from "./functions/if.js";
 import { And } from "./functions/and.js";
@@ -22,7 +23,7 @@ import { GreaterOrEqualTo } from "./functions/greaterOrEqualTo.js";
 import { LessThan } from "./functions/lessThan.js";
 import { LessOrEqualTo } from "./functions/lessOrEqualTo.js";
 import { EqualTo } from "./functions/equalTo.js";
-import { TranspiledFunction } from "./expressions/transpiledFunction.js";
+import { Mutate } from "./functions/mutate.js"
 
 
 // looks for logic and structure errors
@@ -44,7 +45,8 @@ export class Refiner {
         "GreaterOrEqualTo":GreaterOrEqualTo,
         "LessThan":LessThan,
         "LessOrEqualTo":LessOrEqualTo,
-        "EqualTo":EqualTo
+        "EqualTo":EqualTo,
+        "Mutate":Mutate,
     }
     static refineAst(ast) {
         function refineChild(child) {

@@ -12,7 +12,7 @@ Import <| "std.Concat"
 Import <| "std.Reverse"
 
 // the height of the pyramid to create
-(pyramidHeight, 10) |> PureAssign
+(pyramidHeight, 20) |> PureAssign
 
 // creates a pyramid of '*'s with the specified
 // height returns it as a String
