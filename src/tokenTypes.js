@@ -34,8 +34,8 @@ export class TokenTypes {
     static PIPE_LEFT = "<|";
     static PIPE_RIGHT = "|>";
     // literal characters
-    static NUMBER_CHARS = "0123456789.";
-    static NUMBER_START_CHARS = "0123456789";
+    static NUMBER_CHARS = "-0123456789.";
+    static NUMBER_START_CHARS = "-0123456789";
     static STRING_CHARS = "\"'";
     static STRING_START_CHARS = "\"'";
     // start, end

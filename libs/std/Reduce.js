@@ -5,7 +5,7 @@ class Reduce {
     static resolve() {
         return function() {
             let a = [...arguments];
-            return a[0].reduce(a[1]);
+            return a[0].reduce(a[1], a[2]);
         }
     }
 }
