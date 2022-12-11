@@ -11,6 +11,7 @@
     - [Overview](#overview)
     - [Examples](#examples)
     - [Getting Started](#getting-started)
+    - [Language Reference](#language-reference)
 ## Overview
 fcpl is an [expression-based](https://en.wikipedia.org/wiki/Expression-oriented_programming_language), [dynamic](https://en.wikipedia.org/wiki/Dynamic_programming_language), [weakly typed](https://en.wikipedia.org/wiki/Strong_and_weak_typing), [functional programming language](https://en.wikipedia.org/wiki/Functional_programming) which [transpliles](https://en.wikipedia.org/wiki/Source-to-source_compiler) into JavaScript. Its syntax is inspired by [F#](https://en.wikipedia.org/wiki/F_Sharp_(programming_language)) and [CoffeeScript](https://en.wikipedia.org/wiki/CoffeeScript).
 
@@ -44,6 +45,24 @@ For <| (10, (x), {
 ```
 
 ## Getting Started
+
+You can run the fcpl command line by running:
+```bash
+node ./src/main.js
+```
+You can transpile an fcpl file by running:
+```bash
+node ./src/main.js FILE_PATH
+```
+This will output the transpiled JavaScript into `./output/output.js`
+
+Example:
+```bash
+node ./src/main.js ./examples/helloworld.fcpl && node ./output/output.js
+```
+
+## Language Reference
+
 fcpl source code consists of Variables, Literals and the Pipe Operator - No Exceptions.
 
 ### The Pipe Operator
