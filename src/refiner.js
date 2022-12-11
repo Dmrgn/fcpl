@@ -24,6 +24,7 @@ import { LessThan } from "./functions/lessThan.js";
 import { LessOrEqualTo } from "./functions/lessOrEqualTo.js";
 import { EqualTo } from "./functions/equalTo.js";
 import { Mutate } from "./functions/mutate.js"
+import { Property } from "./functions/property.js";
 
 
 // looks for logic and structure errors
@@ -47,6 +48,7 @@ export class Refiner {
         "LessOrEqualTo":LessOrEqualTo,
         "EqualTo":EqualTo,
         "Mutate":Mutate,
+        "Property":Property,
     }
     static refineAst(ast) {
         function refineChild(child) {

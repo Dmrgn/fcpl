@@ -1,5 +1,5 @@
 Import <| "std.Print"
-(value, "test") |> ImpureAssign
-{
-    value |> Print // produces compile time error
-}
+
+PureAssign <| (string, "length")
+
+(string, string) |> Property |> Print
